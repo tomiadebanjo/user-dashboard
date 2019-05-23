@@ -1,10 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import AppRouting from './containers/AppRouting';
 
-const Main = () => <AppRouting />;
+import configureStore from './store/configureStore';
+const store = configureStore();
+
+const Main = () => (
+  <Provider store={store}>
+    <AppRouting />
+  </Provider>
+);
 
 ReactDOM.render(<Main />, document.getElementById('root'));
 
