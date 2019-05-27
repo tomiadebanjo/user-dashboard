@@ -22,6 +22,9 @@ import SettingsEthIcon from '@material-ui/icons/SettingsEthernet';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const drawerWidth = 240;
 
@@ -56,6 +59,9 @@ const styles = theme => ({
   nested: {
     paddingLeft: theme.spacing.unit * 4,
   },
+  grow: {
+    flexGrow: 1,
+  },
 });
 
 class Dashboard extends React.Component {
@@ -64,6 +70,7 @@ class Dashboard extends React.Component {
     adminButtonOpen: false,
     apiButtonOpen: false,
     reportButtonOpen: false,
+    anchorEl: null,
   };
 
   handleDrawerToggle = () => {
@@ -82,8 +89,18 @@ class Dashboard extends React.Component {
     this.setState(state => ({ reportButtonOpen: !state.reportButtonOpen }));
   };
 
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
   render() {
     const { classes, theme, children } = this.props;
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
 
     const drawer = (
       <div>
@@ -207,9 +224,42 @@ class Dashboard extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography
+              variant="h6"
+              color="inherit"
+              noWrap
+              className={classes.grow}
+            >
               Songhai
             </Typography>
+
+            <div>
+              <IconButton
+                aria-owns={open ? 'menu-appbar' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={this.handleClose}
+              >
+                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+              </Menu>
+            </div>
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
