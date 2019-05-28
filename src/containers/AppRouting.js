@@ -5,10 +5,9 @@ import {
   createMuiTheme,
   withStyles,
 } from '@material-ui/core/styles';
-import NavBar from '../components/NavBar';
 import Login from './pages/Login';
 import CreateOrganization from '../components/OrganizationAdmin/CreateOrganization';
-import ViewAdmin from '../components/OrganizationAdmin/ViewAdmin';
+import ViewOrganizations from '../components/OrganizationAdmin/ViewOrganizations';
 import CreateApi from '../components/Api/CreateApi';
 import ViewApi from '../components/Api/ViewApi';
 import GenerateReport from '../components/Reports/GenerateReport';
@@ -49,7 +48,7 @@ const Routes = ({ classes }) => (
   <Router className={classes.layout}>
     <Login path="/" />
     <Dashboard path="dashboard">
-      <ViewAdmin path="/" />
+      <ViewOrganizations path="/" />
       <CreateOrganization path="admin/create" />
       <ViewApi path="api" />
       <CreateApi path="api/create" />
