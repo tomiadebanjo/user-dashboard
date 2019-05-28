@@ -12,6 +12,8 @@ import CreateApi from '../components/Api/CreateApi';
 import ViewApi from '../components/Api/ViewApi';
 import GenerateReport from '../components/Reports/GenerateReport';
 import Dashboard from './pages/Dashboard';
+import ViewUsers from '../components/Users/ViewUsers.js';
+import EmailSettings from '../components/Settings/EmailSettings.js';
 
 const theme = createMuiTheme({
   palette: {
@@ -53,6 +55,8 @@ const Routes = ({ classes }) => (
       <ViewApi path="api" />
       <CreateApi path="api/create" />
       <GenerateReport path="reports/generate" />
+      <ViewUsers path="users" />
+      <EmailSettings path="emailSettings" />
     </Dashboard>
   </Router>
 );
