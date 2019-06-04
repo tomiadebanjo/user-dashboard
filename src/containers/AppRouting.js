@@ -18,7 +18,7 @@ import EmailSettings from '../components/Settings/EmailSettings.js';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#009688',
+      main: '#27487B',
     },
     secondary: {
       light: '#ffffff',

@@ -51,6 +51,10 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+  },
 });
 
 class Dashboard extends React.Component {
@@ -166,7 +170,7 @@ class Dashboard extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
-        {children}
+        <main className={classes.content}>{children}</main>
       </div>
     );
   }

@@ -23,24 +23,25 @@ code {
 
 /* override primary button to match app theme */
 .ant-btn-primary {
-  background-color: #009688;
-  border-color: #009688;
+  background-color: #ad0103;
+  border-color: #ad0103;
 }
 
 .ant-btn-primary:hover {
-  background-color: #3ac4b6;
-  border-color: #3ac4b6;
+  background-color: #ad0103;
+  border-color: #ad0103;
 }
 
 .create {
-  background-color: #ff9100;
-  border-color: #ff9100;
+  background-color: #ad0103;
+  border-color: #ad0103;
   padding-left: 100px;
   padding-right: 100px;
 }
+
 .create:hover {
-  background-color: #f7b45d;
-  border-color: #ff9100;
+  background-color: #ad0103;
+  border-color: #ad0103;
 }
 
 .active {
