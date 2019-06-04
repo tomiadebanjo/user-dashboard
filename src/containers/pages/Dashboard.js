@@ -2,29 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import { Link } from '@reach/router';
-import SendIcon from '@material-ui/icons/Send';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import BusinessIcon from '@material-ui/icons/Business';
-import SettingsEthIcon from '@material-ui/icons/SettingsEthernet';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import SystemAdminNav from '../../components/SideNav/SystemAdminNav';
+import SuperAdminNav from '../../components/SideNav/SuperAdminNav';
 
 const drawerWidth = 240;
 
@@ -62,6 +51,10 @@ const styles = theme => ({
   grow: {
     flexGrow: 1,
   },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+  },
 });
 
 class Dashboard extends React.Component {
@@ -77,18 +70,6 @@ class Dashboard extends React.Component {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
-  handleAdminButtonClick = () => {
-    this.setState(state => ({ adminButtonOpen: !state.adminButtonOpen }));
-  };
-
-  handleApiButtonClick = () => {
-    this.setState(state => ({ apiButtonOpen: !state.apiButtonOpen }));
-  };
-
-  handleReportButtonClick = () => {
-    this.setState(state => ({ reportButtonOpen: !state.reportButtonOpen }));
-  };
-
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
@@ -97,119 +78,18 @@ class Dashboard extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handler = param => {
+    this.setState(state => ({ [param]: !state[param] }));
+  };
+
   render() {
     const { classes, theme, children } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
-    const drawer = (
-      <div>
-        <div className={classes.toolbar} />
-        <Divider />
-        <List>
-          <ListItem
-            button
-            key="admin"
-            onClick={this.handleAdminButtonClick}
-            className={classes.links}
-          >
-            <ListItemIcon>
-              <BusinessIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Organizations" />
-            {this.state.adminButtonOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse
-            in={this.state.adminButtonOpen}
-            timeout="auto"
-            unmountOnExit
-          >
-            <List component="div" disablePadding>
-              <ListItem
-                button
-                className={classes.nested}
-                component={Link}
-                to="./"
-              >
-                <ListItemIcon>
-                  <SendIcon />
-                </ListItemIcon>
-                <ListItemText inset primary="View organizations" />
-              </ListItem>
-            </List>
-            <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <SendIcon />
-                </ListItemIcon>
-                <ListItemText inset primary="Add organization" />
-              </ListItem>
-            </List>
-          </Collapse>
-
-          <ListItem
-            button
-            key="api"
-            onClick={this.handleApiButtonClick}
-            className={classes.links}
-          >
-            <ListItemIcon>
-              <SettingsEthIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Api Agent" />
-            {this.state.apiButtonOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={this.state.apiButtonOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                button
-                className={classes.nested}
-                component={Link}
-                to="api"
-              >
-                <ListItemIcon>
-                  <SendIcon />
-                </ListItemIcon>
-                <ListItemText inset primary="create api" />
-              </ListItem>
-            </List>
-          </Collapse>
-
-          <ListItem
-            button
-            key="reports"
-            onClick={this.handleReportButtonClick}
-            className={classes.links}
-          >
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText inset primary="Reports" />
-            {this.state.reportButtonOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse
-            in={this.state.reportButtonOpen}
-            timeout="auto"
-            unmountOnExit
-          >
-            <List component="div" disablePadding>
-              <ListItem
-                button
-                className={classes.nested}
-                component={Link}
-                to="reports"
-              >
-                <ListItemIcon>
-                  <SendIcon />
-                </ListItemIcon>
-                <ListItemText inset primary="Generate report" />
-              </ListItem>
-            </List>
-          </Collapse>
-        </List>
-        <Divider />
-      </div>
-    );
+    const drawer = true
+      ? SystemAdminNav(classes, this.handler, this.state)
+      : SuperAdminNav(classes, this.handler, this.state);
 
     return (
       <div className={classes.root}>
@@ -290,7 +170,7 @@ class Dashboard extends React.Component {
             </Drawer>
           </Hidden>
         </nav>
-        {children}
+        <main className={classes.content}>{children}</main>
       </div>
     );
   }
