@@ -13,6 +13,11 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { FormHelperText } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import green from '@material-ui/core/colors/green';
+import { connect } from 'react-redux';
+import { login } from '../../actions/auth.action';
+import { Redirect } from '@reach/router';
 
 const styles = theme => ({
   main: {
@@ -45,11 +50,20 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: 'calc(50% - 12px)',
+  },
+  wrapper: {
+    margin: theme.spacing.unit,
+    position: 'relative',
+  },
 });
 
 class Auth extends Component {
   state = {
-    name: '',
     email: '',
     password: '',
   };
@@ -62,13 +76,18 @@ class Auth extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { name, email, password } = this.state;
-    console.log({ name, email, password });
+    const { email, password } = this.state;
+    this.props.handleLogin({ username: email, password });
+    console.log({ email, password });
   };
 
   render() {
     const { email, password } = this.state;
-    const { classes, error } = this.props;
+    const { classes, error, loading } = this.props;
+
+    if (this.props.isAuthenticated) {
+      return <Redirect to="dashboard" noThrow />;
+    }
 
     return (
       <main className={classes.main}>
@@ -82,7 +101,7 @@ class Auth extends Component {
           </Typography>
           <form onSubmit={this.handleSubmit} className={classes.form}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
+              <InputLabel htmlFor="email">Username</InputLabel>
               <Input
                 onChange={this.handleInputChange}
                 value={email}
@@ -104,24 +123,29 @@ class Auth extends Component {
                 autoComplete="current-password"
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             {error && (
               <FormHelperText error id="">
                 {error}
               </FormHelperText>
             )}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign in
-            </Button>
+            <div className={classes.wrapper}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                disabled={loading}
+              >
+                Sign in
+              </Button>
+              {loading && (
+                <CircularProgress
+                  size={24}
+                  className={classes.buttonProgress}
+                />
+              )}
+            </div>
           </form>
         </Paper>
       </main>
@@ -133,4 +157,20 @@ Auth.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Auth);
+const mapStateToProps = ({ auth }) => ({
+  isAuthenticated: auth.isAuthenticated,
+  loading: auth.loading,
+  // error: auth.error,
+  user: auth.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  handleLogin(payload) {
+    dispatch(login(payload));
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Auth));

@@ -54,6 +54,7 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 10,
   },
 });
 
@@ -110,7 +111,7 @@ class Dashboard extends React.Component {
               noWrap
               className={classes.grow}
             >
-              Songhai
+              Main
             </Typography>
 
             <div>

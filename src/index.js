@@ -7,7 +7,11 @@ import * as serviceWorker from './serviceWorker';
 import AppRouting from './containers/AppRouting';
 
 import configureStore from './store/configureStore';
+import TokenHelpers from './utils/TokenHelpers';
+
 const store = configureStore();
+
+TokenHelpers.autoLogIn(store);
 
 const Main = () => (
   <Provider store={store}>

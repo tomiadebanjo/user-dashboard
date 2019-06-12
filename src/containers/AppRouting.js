@@ -14,6 +14,7 @@ import GenerateReport from '../components/Reports/GenerateReport';
 import Dashboard from './pages/Dashboard';
 import ViewUsers from '../components/Users/ViewUsers.js';
 import EmailSettings from '../components/Settings/EmailSettings.js';
+import PrivateRoute from './pages/PrivateDashboard';
 
 const theme = createMuiTheme({
   palette: {
@@ -49,15 +50,15 @@ const styles = {
 const Routes = ({ classes }) => (
   <Router className={classes.layout}>
     <Login path="/" />
-    <Dashboard path="dashboard">
+    <PrivateRoute path="dashboard" component={Dashboard}>
       <ViewOrganizations path="/" />
-      <CreateOrganization path="admin/create" />
+      <CreateOrganization path="organizations/create" />
       <ViewApi path="api" />
       <CreateApi path="api/create" />
       <GenerateReport path="reports/generate" />
       <ViewUsers path="users" />
       <EmailSettings path="emailSettings" />
-    </Dashboard>
+    </PrivateRoute>
   </Router>
 );
 

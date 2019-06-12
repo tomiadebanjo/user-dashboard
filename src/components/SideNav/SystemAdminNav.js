@@ -41,7 +41,12 @@ const systemAdminNav = (classes, handler, state) => (
           </ListItem>
         </List>
         <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
+          <ListItem
+            button
+            className={classes.nested}
+            component={Link}
+            to="organizations/create"
+          >
             <ListItemIcon>
               <SendIcon />
             </ListItemIcon>

@@ -1,30 +1,34 @@
 import React from 'react';
 import { Input, Button, Icon, Table } from 'antd';
+import { connect } from 'react-redux';
+import { fetchOrganizations } from '../actions/organization.action';
 
 const Search = Input.Search;
 
 const organizations = [
   {
     key: '1',
-    name: '1GLOBAL GROUP',
+    companyName: '1GLOBAL GROUP',
     description: 'toronto',
     url: 'https://glg.themoneytransferapplication.com',
     created: new Date().toJSON().slice(0, 10),
     a: '✏️',
     b: 'deactivate',
+    active: true,
   },
   {
     key: '2',
-    name: '1stAfrican',
+    companyName: '1stAfrican',
     description: 'FIRST AFRICAN SAVINGS AND LOANS LIMITED',
     url: 'https://glg.themoneytransferapplication.com',
     created: new Date().toJSON().slice(0, 10),
     a: '✏️',
     b: 'deactivate',
+    active: false,
   },
   {
     key: '3',
-    name: 'A Matos Business',
+    companyName: 'A Matos Business',
     description:
       'Customer is running a startup and requires money transfer solution',
     url: 'https://matos.themoneytransferapplication.com',
@@ -32,24 +36,27 @@ const organizations = [
     deleted: 'yes',
     a: '✏️',
     b: 'activate',
+    active: true,
   },
   {
     key: '4',
-    name: 'Ayustro india',
+    companyName: 'Ayustro india',
     description: 'hiii',
     url: 'https://ayustro.themoneytransferapplication.com',
     created: new Date().toJSON().slice(0, 10),
     a: '✏️',
     b: 'deactivate',
+    active: false,
   },
   {
     key: '5',
-    name: 'Abacus',
+    companyName: 'Abacus',
     description: 'Inside Africa test account',
     url: 'https://abacus1.themoneytransferapplication.com',
     created: new Date().toJSON().slice(0, 10),
     a: '✏️',
     b: 'activate',
+    active: true,
   },
 ];
 
@@ -87,20 +94,25 @@ class OrganizationTable extends React.Component {
     });
   };
 
+  componentDidMount() {
+    this.props.getOrganizations();
+  }
+
   render() {
+    console.table(this.props.organizationsList);
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [
       {
         title: 'Company name',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'companyName',
+        key: 'companyName',
         filters: [{ text: 'Joe', value: 'Joe' }, { text: 'Jim', value: 'Jim' }],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
+        filteredValue: filteredInfo.companyName || null,
+        onFilter: (value, record) => record.companyName.includes(value),
+        sorter: (a, b) => a.companyName.length - b.companyName.length,
+        sortOrder: sortedInfo.columnKey === 'companyName' && sortedInfo.order,
       },
       {
         title: 'Description',
@@ -110,9 +122,9 @@ class OrganizationTable extends React.Component {
         sortOrder: sortedInfo.columnKey === 'description' && sortedInfo.order,
       },
       {
-        title: 'URL',
-        dataIndex: 'url',
-        key: 'url',
+        title: 'Domain Name',
+        dataIndex: 'domainName',
+        key: 'domainName',
         filters: [
           { text: 'London', value: 'London' },
           { text: 'New York', value: 'New York' },
@@ -121,28 +133,25 @@ class OrganizationTable extends React.Component {
         onFilter: (value, record) => record.address.includes(value),
         sorter: (a, b) => a.address.length - b.address.length,
         sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
-        render: text => <a href={text}>{text}</a>,
-      },
-      {
-        title: 'Created on',
-        dataIndex: 'created',
-        key: 'created',
+        render: text => <a href={`http://${text}`}>{text}</a>,
       },
       {
         title: 'Edit',
-        dataIndex: 'a',
-        key: 'a',
+        dataIndex: '',
+        key: 'edit',
+        render: () => <a href="#">✏️</a>,
       },
       {
         title: 'Action',
-        dataIndex: 'b',
-        key: 'b',
-        render: text => (
+        dataIndex: 'active',
+        key: 'active',
+        render: (text, record) => (
           <a
-            className={text === 'activate' ? 'active' : 'inactive'}
-            href={text}
+            className={text ? 'inactive' : 'active'}
+            href="#"
+            onClick={e => console.log(e, record)}
           >
-            {text}
+            {text ? 'deactivate' : 'activate'}
           </a>
         ),
       },
@@ -163,18 +172,31 @@ class OrganizationTable extends React.Component {
             Create
           </Button>
         </div>
+        {/* onRow={(r, i) => console.log('r', r, 'i', i, 'this', this)} */}
         <Table
-          onRow={(r, i) => console.log('r', r, 'i', i, 'this', this)}
           rowClassName={(r, i) => {
             return i % 2 === 0 ? 'odd-row' : '';
           }}
           columns={columns}
-          dataSource={organizations}
+          dataSource={this.props.organizationsList}
           onChange={this.handleChange}
+          loading={this.props.loading}
         />
       </div>
     );
   }
 }
 
-export default OrganizationTable;
+const mapStateToProps = ({ organizations }) => ({
+  organizationsList: organizations.organizationsList,
+  loading: organizations.loading,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getOrganizations: () => dispatch(fetchOrganizations()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OrganizationTable);

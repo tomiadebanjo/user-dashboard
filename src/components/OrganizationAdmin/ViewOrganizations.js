@@ -35,7 +35,7 @@ const styles = theme => ({
   content: {
     // flexGrow: 1,
     // padding: theme.spacing.unit * 3,
-    paddingTop: theme.spacing.unit * 10,
+    // paddingTop: theme.spacing.unit * 10,
   },
   heading: {
     paddingBottom: theme.spacing.unit * 5,
